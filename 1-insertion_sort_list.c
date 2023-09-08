@@ -1,48 +1,44 @@
 #include "sort.h"
-
 /**
- * insertion_sort_list - sorts a doubly linked list using insertion sort.
- * @list: Pointer to a pointer to the head of the list.
+ * insertion_sort_list - sorts a doubly linked list in ascending
+ * order using the Insertion sort algorithm
+ * @list: doubly linked list of integers to be sorted
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *sorted = NULL;
-	listint_t *current = *list;
-
-	if (list == NULL || *list == NULL || (*list)->next == NULL)
+	bool flag = false;
+	listint_t *travel = NULL, *aux = NULL;
+	if (!list || !(*list) || !(*list)->next)
 		return;
-
-	while (current != NULL)
+	travel = *list;
+	while (travel->next)
 	{
-		listint_t *next_node = current->next;
-
-		if (sorted == NULL || current->n <= sorted->n)
+		if (travel->n > travel->next->n)
 		{
-			current->next = sorted;
-			current->prev = NULL;
-
-			if (sorted != NULL)
-				sorted->prev = current;
-			sorted = current;
+			travel->next->prev = travel->prev; /* separar travel de la lista */
+			if (travel->next->prev)
+				travel->prev->next = travel->next;
+			else
+				*list = travel->next;
+			travel->prev = travel->next; /* adjuntar travel después del sig. nodo */
+			travel->next = travel->next->next; /* mover el sig. nodo hacia atrás */
+			travel->prev->next = travel;
+			if (travel->next)
+				travel->next->prev = travel;
+			travel = travel->prev;
+			print_list(*list);
+			if (travel->prev && travel->prev->n > travel->n) /* cambiar de nuevo */
+			{
+				if (!flag)
+					aux = travel->next;
+				flag = true;
+				travel = travel->prev;
+				continue;
+			}
 		}
-		else
-		{
-			listint_t *temp = sorted;
-
-			while (temp->next != NULL && temp->next->n < current->n)
-				temp = temp->next;
-
-			current->next = temp->next;
-			current->prev = temp;
-
-			if (temp->next != NULL)
-				temp->next->prev = current;
-			temp->next = current;
-		}
-
-		current = next_node;
+		if (!flag) /* no se necesitan intercambios */
+			travel = travel->next;
+		else /* se hicieron todos los intercambios, continua recorriendo la lista */
+			travel = aux, flag = false;
 	}
-
-	*list = sorted;
 }
-
