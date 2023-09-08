@@ -8,6 +8,7 @@ void insertion_sort_list(listint_t **list)
 {
 	bool flag = false;
 	listint_t *travel = NULL, *aux = NULL;
+
 	if (!list || !(*list) || !(*list)->next)
 		return;
 	travel = *list;
