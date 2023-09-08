@@ -9,8 +9,8 @@ void insertion_sort_list(listint_t **list)
     if (list == NULL || *list == NULL || (*list)->next == NULL)
         return;
 
-    listint_t *sorted = NULL; // Lista ordenada
-
+    /* Declare variables at the beginning of the block */
+    listint_t *sorted = NULL; /** Lista ordenada **/
     listint_t *current = *list;
 
     while (current != NULL)
@@ -19,13 +19,14 @@ void insertion_sort_list(listint_t **list)
         current->prev = NULL;
         current->next = NULL;
 
-        insert_sorted(&sorted, current); // Para insertar mi nodo actual en la lista ordenada
+        insert_sorted(&sorted, current); /** Para insertar mi nodo actual en la lista ordenada **/
 
         current = next_node;
     }
 
     *list = sorted;
 }
+
 
 /**
  * insert_sorted - sorts a doubly linked list of integers in ascending order using the Insertion sort algorithm
@@ -47,7 +48,7 @@ void insert_sorted(listint_t **sorted, listint_t *node)
             temp = temp->next;
 
         node->next = temp->next;
-        
+
         if (temp->next != NULL)
             temp->next->prev = node;
         temp->next = node;
