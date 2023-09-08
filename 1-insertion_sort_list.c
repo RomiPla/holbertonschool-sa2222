@@ -1,57 +1,59 @@
 #include "sort.h"
 
 /**
- * insertion_sort_list - sorts a doubly linked list of integers in ascending order using the Insertion sort algorithm
+ * insertion_sort_list - sorts a doubly linked list.
  *@list: what to print
  */
 void insertion_sort_list(listint_t **list)
 {
-    if (list == NULL || *list == NULL || (*list)->next == NULL)
-        return;
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
+		return;
 
-    /* Declare variables at the beginning of the block */
-    listint_t *sorted = NULL; /** Lista ordenada **/
-    listint_t *current = *list;
+	listint_t *sorted = NULL;
+	listint_t *current = *list;
 
-    while (current != NULL)
-    {
-        listint_t *next_node = current->next;
-        current->prev = NULL;
-        current->next = NULL;
+	while (current != NULL)
+	{
+		listint_t *next_node = current->next;
 
-        insert_sorted(&sorted, current); /** Para insertar mi nodo actual en la lista ordenada **/
+		current->prev = NULL;
+		current->next = NULL;
 
-        current = next_node;
-    }
+		insert_sorted(&sorted, current);
 
-    *list = sorted;
+		current = next_node;
+	}
+
+	*list = sorted;
 }
 
-
 /**
- * insert_sorted - sorts a doubly linked list of integers in ascending order using the Insertion sort algorithm
+ * insert_sorted - sorts a doubly linked list.
+ * @sorted: listint_t
+ * @node: listint_t
  */
 void insert_sorted(listint_t **sorted, listint_t *node)
 {
-    if (*sorted == NULL || node->n <= (*sorted)->n)
-    {
-        node->next = *sorted;
-        if (*sorted != NULL)
-            (*sorted)->prev = node;
-        *sorted = node;
-    }
-    else
-    {
-        listint_t *temp = *sorted;
-        
-        while (temp->next != NULL && temp->next->n < node->n)
-            temp = temp->next;
+	if (*sorted == NULL || node->n <= (*sorted)->n)
+	{
+		node->next = *sorted;
 
-        node->next = temp->next;
+		if (*sorted != NULL)
+			(*sorted)->prev = node;
+		*sorted = node;
+	}
+	else
+	{
+		listint_t *temp = *sorted;
 
-        if (temp->next != NULL)
-            temp->next->prev = node;
-        temp->next = node;
-        node->prev = temp;
-    }
+		while (temp->next != NULL && temp->next->n < node->n)
+			temp = temp->next;
+
+		node->next = temp->next;
+
+		if (temp->next != NULL)
+			temp->next->prev = node;
+		temp->next = node;
+		node->prev = temp;
+	}
 }
