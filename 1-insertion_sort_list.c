@@ -1,8 +1,8 @@
 #include "sort.h"
 
 /**
- * insertion_sort_list - sorts a doubly linked list.
- *@list: what to print
+ * insertion_sort_list - sorts a doubly linked list using insertion sort.
+ * @list: Pointer to a pointer to the head of the list.
  */
 void insertion_sort_list(listint_t **list)
 {
@@ -16,10 +16,29 @@ void insertion_sort_list(listint_t **list)
 	{
 		listint_t *next_node = current->next;
 
-		current->prev = NULL;
-		current->next = NULL;
+		if (sorted == NULL || current->n <= sorted->n)
+		{
+			current->next = sorted;
+			current->prev = NULL;
 
-		insert_sorted(&sorted, current);
+			if (sorted != NULL)
+				sorted->prev = current;
+			sorted = current;
+		}
+		else
+		{
+			listint_t *temp = sorted;
+
+			while (temp->next != NULL && temp->next->n < current->n)
+				temp = temp->next;
+
+			current->next = temp->next;
+			current->prev = temp;
+
+			if (temp->next != NULL)
+				temp->next->prev = current;
+			temp->next = current;
+		}
 
 		current = next_node;
 	}
@@ -27,33 +46,3 @@ void insertion_sort_list(listint_t **list)
 	*list = sorted;
 }
 
-/**
- * insert_sorted - sorts a doubly linked list.
- * @sorted: listint_t
- * @node: listint_t
- */
-void insert_sorted(listint_t **sorted, listint_t *node)
-{
-	if (*sorted == NULL || node->n <= (*sorted)->n)
-	{
-		node->next = *sorted;
-
-		if (*sorted != NULL)
-			(*sorted)->prev = node;
-		*sorted = node;
-	}
-	else
-	{
-		listint_t *temp = *sorted;
-
-		while (temp->next != NULL && temp->next->n < node->n)
-			temp = temp->next;
-
-		node->next = temp->next;
-
-		if (temp->next != NULL)
-			temp->next->prev = node;
-		temp->next = node;
-		node->prev = temp;
-	}
-}
